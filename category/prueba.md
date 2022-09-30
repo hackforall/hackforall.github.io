@@ -1,7 +1,7 @@
 ---
 layout: category
 title: Prueba
-slug: prueba
+slug: prue
 description: A category for prueba blog posts.
 ---
 
