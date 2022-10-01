@@ -12,7 +12,8 @@ show_hero: true
 menu:
   - title: Home
     url: /
-  
+  - title: Enumeration  
+    url: /category/enumeration
 
 email: youremail@test.com
 # See: https://disqus.com/
