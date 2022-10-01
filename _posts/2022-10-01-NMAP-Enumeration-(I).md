@@ -1,19 +1,19 @@
 ---
-date: 2020-05-16T23:48:05.000Z
+date: 2022-10-01T08:00:00.000Z
 layout: post
-title: XSS ATTACKS II
-subtitle: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+title: NMAP Enumeration (I)
+subtitle: 'A initial guide for NMAP Enumeration'
 description: >-
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
   tempor incididunt ut labore et dolore magna aliqua.
 image: >-
-  /assets/img/uploads/cl3pcggm.bmp
+  /assets/img/uploads/nmap.png
 optimized_image: >-
-  /assets/img/uploads/cl3pcggm.bmp
-category: prueba
+  /assets/img/uploads/nmap.png
+category: Enumeration
 tags:
-  - welcome
-  - blog
+  - Enumeration
+  - Hacking-Tools
 author: hackforall
 paginate: false
 ---

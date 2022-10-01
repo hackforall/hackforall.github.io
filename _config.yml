@@ -12,56 +12,8 @@ show_hero: true
 menu:
   - title: Home
     url: /
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
-  - title: Prueba
-    url: /category/prueba
+  - title: Enumeration
+    url: /category/Enumeration
   
   
 
