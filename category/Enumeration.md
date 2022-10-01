@@ -1,6 +1,6 @@
 ---
 layout: category
-title: Enumeration
+title: enumeration
 slug: enumeration
 description: A Category for Enumeration Hacking Tecniques.
 ---
