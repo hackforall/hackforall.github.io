@@ -10,7 +10,7 @@ image: >-
   /assets/img/uploads/nmap.png
 optimized_image: >-
   /assets/img/uploads/nmap.png
-category: enumeration
+category: 
 tags:
   - Enumeration
   - Hacking-Tools
