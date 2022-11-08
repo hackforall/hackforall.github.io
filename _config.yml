@@ -14,6 +14,8 @@ menu:
     url: /
   - title: Enumeration  
     url: /category/enumeration
+  - title: Buffer Overflow  
+    url: /category/bufferoverflow
 
 email: youremail@test.com
 # See: https://disqus.com/

@@ -1,6 +1,6 @@
 ---
 layout: category
-title: Buffer Overflow
+title: Bufferoverflow
 slug: bufferoverflow
 description: A category for buffer explotation techniques
 ---
