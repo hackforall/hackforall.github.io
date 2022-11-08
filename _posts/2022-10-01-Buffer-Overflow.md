@@ -1,7 +1,7 @@
 ---
-date: 2022-11-08T17:00:00.000Z
+date: 2022-10-01T08:00:00.000Z
 layout: post
-title: BUFFER OVERFLOW I
+title: Buffer Overflow (I)
 subtitle: 'CTF BRAINPAN 1 - Buffer Overflow - Stack Based'
 description: >-
   CTF writeup about services enumeration, buffer overflow and python scripting.
@@ -12,7 +12,7 @@ optimized_image: >-
 category: enumeration
 tags:
   - Enumeration
-  - Buffer
+  - Hacking-Tools
 author: hackforall
 paginate: false
 ---
