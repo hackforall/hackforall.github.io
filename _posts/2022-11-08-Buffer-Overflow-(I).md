@@ -6,13 +6,13 @@ subtitle: 'CTF BRAINPAN 1 - Buffer Overflow - Stack Based'
 description: >-
   CTF writeup about services enumeration, buffer overflow and python scripting.
 image: >-
-  /assets/img/uploads/nmap.png
+  /assets/img/uploads/bufferoverflow1.jpg
 optimized_image: >-
   /assets/img/uploads/bufferoverflow1.jpg
-category: bufferoverflow
+category: enumeration
 tags:
   - Enumeration
-  - Buffer-Overflow
+  - Hacking-Tools
 author: hackforall
 paginate: false
 ---
