@@ -31,8 +31,6 @@ So, let's start with it.
 
 # Requirements
 
-<br/>
-
 * VMWARE or similar.
 * A Offensive Linux Machine (Kali Linux or Parrot)
 * Windows Machine
@@ -46,8 +44,6 @@ So, let's start with it.
 <br/>
 
 # Vulnhub Image Download and Deployment
-
-<br/>
 
 We will go to the following link and download the zip file:
 
