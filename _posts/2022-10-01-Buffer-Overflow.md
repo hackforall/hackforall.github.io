@@ -12,7 +12,8 @@ optimized_image: >-
 category: bufferoverflow
 tags:
   - Enumeration
-  - Hacking-Tools
+  - Buffer-Overflow
+  - Reverse-Shell
 author: hackforall
 paginate: false
 ---
