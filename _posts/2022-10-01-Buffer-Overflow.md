@@ -68,8 +68,6 @@ In the next phase, we need to know the IP of the vulnerable machine that the DHC
 
 # ATTACK MACHINE AND INITIAL ENUMERATION
 
-<br/>
-
 We will start the attack machine and show our IP with the command 
 
 ```bash
@@ -96,8 +94,6 @@ sudo netdiscover -P -i ens33 -r  192.168.74.0/24 |grep -E -o "([0-9]{1,3}[\.]){3
 <br/>
 
 # VULNERABLE MACHINE ENUMERATION
-
-<br/>
 
 
 > Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
