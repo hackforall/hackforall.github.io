@@ -9,7 +9,7 @@ image: >-
   /assets/img/uploads/bufferoverflow1.jpg
 optimized_image: >-
   /assets/img/uploads/bufferoverflow1.jpg
-category: enumeration
+category: bufferoverflow
 tags:
   - Enumeration
   - Hacking-Tools
