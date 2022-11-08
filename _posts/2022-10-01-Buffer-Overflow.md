@@ -179,6 +179,8 @@ And check the conection with the attack machine:
 
 ![placeholder](/assets/img/uploads/bufoverflow1/9.png "Large example image")
 
+## FUZZING INPUT PARAMETER TEST
+
 Now we need to create a python script to test the input of the service:
 
 ```python
