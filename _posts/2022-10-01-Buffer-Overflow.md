@@ -1,5 +1,5 @@
 ---
-date: 2022-10-01T08:00:00.000Z
+date: 2022-11-08T08:00:00.000Z
 layout: post
 title: Buffer Overflow (I)
 subtitle: 'CTF BRAINPAN 1 - Buffer Overflow - Stack Based'
