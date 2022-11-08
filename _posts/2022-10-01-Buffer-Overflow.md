@@ -18,6 +18,8 @@ author: hackforall
 paginate: false
 ---
 
+<br/>
+
 Welcome to HackForAll Blog.
 
 Today, I'm going to solve the BRAINPAN 1 CTF published in the plataform VULNHUB.
@@ -33,8 +35,8 @@ So, let's start with it.
 
 * VMWARE or similar.
 * A Offensive Linux Machine (Kali Linux or Parrot)
-* Windows Machine
-* Python2.7
+* A Windows 7 Machine
+* Python 2.7
 * Inmunnity Debugger
 * MSFvenom
 * Wfuzz, Gobuster or similar.
@@ -91,7 +93,85 @@ sudo netdiscover -P -i ens33 -r  192.168.74.0/24 |grep -E -o "([0-9]{1,3}[\.]){3
 
 # VULNERABLE MACHINE ENUMERATION
 
+First we enumerate the services of the vulnerable host using nmap:
 
+```bash
+sudo nmap -sS 192.168.74.130 
+```
+
+```bash
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-11-08 20:32 CET
+Nmap scan report for 192.168.74.130
+Host is up (0.0052s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT      STATE SERVICE
+9999/tcp  open  abyss
+10000/tcp open  snet-sensor-mgmt
+MAC Address: 00:0C:29:7A:F4:16 (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.49 seconds
+```
+
+> The -sS flag is for doing a TCP SYN (Stealth) Scan.
+
+We initially found 2 services in the ports 9999 and 10000. Let see what is it:
+
+For port 9999, we try to connect to it with netcat and found a autentication service:
+
+```bash
+nc 192.168.74.130 9999
+```
+
+![placeholder](/assets/img/uploads/bufoverflow1/2.png "Large example image")
+
+Probably this is the vulnerable parameter.
+
+For port 1000, we try to connect to it with netcat and not works so I try to access via http and found a web:
+
+
+![placeholder](/assets/img/uploads/bufoverflow1/3.png "Large example image")
+
+Next, we do directory fuzzing in order to found hidden directories and possibles vulnerabilities. We will use wfuzz:
+
+```bash
+wfuzz -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt --hc 404 http://192.168.74.130:10000/FUZZ | grep -v "#" | grep -v "404"
+```
+Parameters:
+
+-w: wordlist path of the fuzzing directory.
+
+--hc: hide the directories that matches with the response code.
+
+![placeholder](/assets/img/uploads/bufoverflow1/4.png "Large example image")
+
+We found a "bin" directory in the web, that allows directory listing:
+
+![placeholder](/assets/img/uploads/bufoverflow1/5.png "Large example image")
+
+We can get the binary with the following command:
+
+```bash
+wget http://192.168.74.130:10000/bin/brainpan.exe
+```
+As the binary file is designed for windows, we will test it in a windown 7 machine. You can found an official .ova in the following link:
+
+[WINDOWS 7 OVA ](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
+
+<br/>
+
+# VULNERABILITY BINARY ANALISYS
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+<br/>
+<br/>
 > Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
 
 Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
