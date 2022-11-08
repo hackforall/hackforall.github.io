@@ -6,9 +6,9 @@ subtitle: 'CTF BRAINPAN 1 - Buffer Overflow - Stack Based'
 description: >-
   CTF writeup about services enumeration, buffer overflow and python scripting.
 image: >-
-  /assets/img/uploads/bufferoverflow1.jpg
+  /assets/img/uploads/bufoverflow1/bufferoverflow1.jpg
 optimized_image: >-
-  /assets/img/uploads/bufferoverflow1.jpg
+  /assets/img/uploads/bufoverflow1/bufferoverflow1.jpg
 category: bufferoverflow
 tags:
   - Enumeration
@@ -17,7 +17,88 @@ tags:
 author: hackforall
 paginate: false
 ---
-Cas sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+
+Welcome to HackForAll Blog.
+
+Today, I'm going to solve the BRAINPAN 1 CTF published in the plataform VULNHUB.
+
+The purpose of this machine is to learn how to exploit the stack doing a buffer overflow in a vulnerable
+binary file.
+
+So, let's start with it.
+
+<br/>
+
+# Requirements
+
+<br/>
+
+* VMWARE or similar.
+* A Offensive Linux Machine (Kali Linux or Parrot)
+* Windows Machine
+* Python2.7
+* Inmunnity Debugger
+* MSFvenom
+* Wfuzz, Gobuster or similar.
+* NMAP
+* Patience
+
+<br/>
+
+# Vulnhub Image Download and Deployment
+
+<br/>
+
+We will go to the following link and download the zip file:
+
+[CTF - BRAINPAN 1 - ZIP](https://download.vulnhub.com/brainpan/Brainpan.zip)
+
+Next, we unzip it and execute the .ova file with VMWARE.
+
+You can assign for example 2Gb of RAM and 2 Cores to properly run the vulnerable machine. In order to have conectivity from Attack Machine to Vulnerable Machine, we need to select NAT network configuration.
+
+Finally, running the machine we obtain something like this:
+
+
+![placeholder](/assets/img/uploads/bufoverflow1/1.png "Large example image")
+
+In the next phase, we need to know the IP of the vulnerable machine that the DHCP assign automately to it.
+
+<br/>
+
+# ATTACK MACHINE AND INITIAL ENUMERATION
+
+<br/>
+
+We will start the attack machine and show our IP with the command 
+
+```bash
+ifconfig | grep inet | awk '{print $2}' | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" | grep -v 127.0.0.1
+```
+
+And obtain the IP of the attack machine:
+
+```bash
+192.168.74.129/32 -- Network -> 192.168.74.0/24
+```
+
+So, we need to enumerate all the up host of the network with nmap:
+
+```bash
+sudo netdiscover -P -i ens33 -r  192.168.74.0/24 |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" | awk '{print $1}'
+```
+```bash
+192.168.74.1
+192.168.74.2
+192.168.74.130 -> The Vulnerable HOST IP.
+192.168.74.254
+```
+<br/>
+
+# VULNERABLE MACHINE ENUMERATION
+
+<br/>
+
 
 > Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
 
@@ -33,6 +114,7 @@ HTML defines a long list of available inline tags, a complete list of which can 
 * Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
 * <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
 * Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+
 
 Most of these elements are styled by browsers with few modifications on our part.
 
